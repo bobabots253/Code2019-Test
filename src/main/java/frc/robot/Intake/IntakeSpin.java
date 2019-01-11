@@ -23,7 +23,7 @@ public class IntakeSpin extends Command {
 
     @Override
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
 }

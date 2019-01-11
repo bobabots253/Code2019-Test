@@ -1,8 +1,6 @@
 package frc.robot;
 
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -43,14 +41,15 @@ public class Robot extends TimedRobot {
     camera.setFPS(15);*/
 
     positionChooser = new SendableChooser<Position>();
-    positionChooser.addDefault("Center", Position.CENTER);
-    positionChooser.addObject("Left", Position.LEFT);
-    positionChooser.addObject("Right", Position.RIGHT);
+    positionChooser.addOption("Center", Position.CENTER);
+    positionChooser.addOption("Left", Position.LEFT);
+    positionChooser.addOption("Right", Position.RIGHT);
     SmartDashboard.putData("Position", positionChooser);
 
     priorityChooser = new SendableChooser<Priority>();
-    priorityChooser.addDefault("Default priority", Priority.DEFAULT);
-    priorityChooser.addObject("Prioritize Baseline", Priority.BASELINE);
+    priorityChooser.addOption("Default priority", Priority.DEFAULT);
+    priorityChooser.addOption("Baseline", Priority.BASELINE);
+
     SmartDashboard.putData("Priority Chooser", priorityChooser);
 
   }

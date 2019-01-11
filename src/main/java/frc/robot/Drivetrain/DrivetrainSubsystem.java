@@ -156,19 +156,4 @@ public class DrivetrainSubsystem extends Subsystem {
         compressor.stop();
     }
 
-    public static void changeCamVal(){
-        ledval=(ledval+1)%3;
-        NetworkTableInstance.getDefault()
-                    .getTable("limelight")
-                    .getEntry("ledMode")
-                    .setNumber(ledval);
-    }
-
-    public static void changeCamVal(int val){
-        val = val%3;
-        NetworkTableInstance.getDefault()
-                    .getTable("limelight")
-                    .getEntry("ledMode")
-                    .setNumber(val);
-    }
 }

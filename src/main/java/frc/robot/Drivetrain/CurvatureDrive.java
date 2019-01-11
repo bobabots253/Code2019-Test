@@ -63,8 +63,8 @@ public class CurvatureDrive extends Command {
         } else {
             DrivetrainSubsystem.setOpenLoopRamp(quickturnRamp);
 
-            left = -qLeft+qRight;
-            right = -qRight+qLeft;
+            left = 0.5*(-qLeft+qRight);
+            right = 0.5*(-qRight+qLeft);
         }
 
         /*

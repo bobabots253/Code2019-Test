@@ -10,42 +10,43 @@ import static frc.robot.OI.XBPovButton.UP;
 import static frc.robot.OI.XBPovButton.UP_LEFT;
 import static frc.robot.OI.XBPovButton.UP_RIGHT;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.Drivetrain.Drive;
-import frc.robot.Drivetrain.DrivetrainSubsystem;
-import frc.robot.Intake.IntakeSpin;
-import frc.robot.Intake.IntakeSubsystem;
+import frc.robot.Drivetrain.VisionTrack;
 
+@SuppressWarnings("unused")
 public class OI {
-    public XboxController xboxcontroller;
-    public JoystickButton ButtonA;
-    public JoystickButton ButtonB;
-    public JoystickButton ButtonX;
-    public JoystickButton ButtonY;
-    public JoystickButton ButtonRB;
-    public JoystickButton ButtonLB;
-    public JoystickButton ButtonRT;
-    public JoystickButton ButtonLT;
-    public Joystick intakestick;
-    public static Joystick elevatorstick;
+    
+    private XboxController xboxcontroller;
 
-    public JoystickButton dpadUP;
-    public JoystickButton dpadUP_RIGHT;
-    public JoystickButton dpadRIGHT;
-    public JoystickButton dpadDOWN_RIGHT;
-    public JoystickButton dpadDOWN;
-    public JoystickButton dpadDOWN_LEFT;
-    public JoystickButton dpadLEFT;
-    public JoystickButton dpadUP_LEFT;
-    public JoystickButton dpadNONE;
+    private JoystickButton ButtonA;
+    private JoystickButton ButtonB;
+    private JoystickButton ButtonX;
+    private JoystickButton ButtonY;
+    private JoystickButton ButtonRB;
+    private JoystickButton ButtonLB;
+    private JoystickButton ButtonRT;
+    private JoystickButton ButtonLT;
+    private Joystick intakestick;
+    private static Joystick elevatorstick;
 
-    public JoystickButton Button1;
-    public JoystickButton Button2;
-    public JoystickButton Button3;
+    private JoystickButton dpadUP;
+    private JoystickButton dpadUP_RIGHT;
+    private JoystickButton dpadRIGHT;
+    private JoystickButton dpadDOWN_RIGHT;
+    private JoystickButton dpadDOWN;
+    private JoystickButton dpadDOWN_LEFT;
+    private JoystickButton dpadLEFT;
+    private JoystickButton dpadUP_LEFT;
+    private JoystickButton dpadNONE;
 
+    private NetworkTable limelight;
+    
     public OI(){
         xboxcontroller = new XboxController(1);
         intakestick = new Joystick(3);
@@ -70,6 +71,11 @@ public class OI {
         dpadUP_LEFT = new XBPovButton(xboxcontroller, UP_LEFT);
         dpadNONE = new XBPovButton(xboxcontroller, NONE);
 
+        limelight = NetworkTableInstance.getDefault().getTable("limelight");
+
+        ButtonB.whileHeld(new VisionTrack());
+
+/*
         //Driver overrides in case joystick buttons fail
         ButtonRB.whileHeld(new IntakeSpin(-0.7));
         ButtonRB.whenReleased(new IntakeSpin(0));
@@ -98,9 +104,27 @@ public class OI {
         Button2.whenReleased(new IntakeSpin(0));
 
         dpadUP.whenPressed(new RunCommand( () -> DrivetrainSubsystem.changeCamVal() ));
-        
+ */       
     }
 
+    /*
+    * Methods for getting limelight values
+    */
+    public double getxOffset() {
+        return limelight.getEntry("tx").getDouble(0);
+    }
+
+    public double getyOffset(){
+        return limelight.getEntry("ty").getDouble(0);
+    }
+
+    public void changeLEDMode(int val){
+        limelight.getEntry("ledMode").setNumber(val);
+    }
+
+    /*
+    * Methods for getting joystick values
+    */
     public double throttleValue() {
         //Controllers y-axes are natively up-negative, down-positive
         return -xboxcontroller.getY(Hand.kLeft);

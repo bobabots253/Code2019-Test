@@ -14,6 +14,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
+/*
+* This is a robot class that can be used to characterize the
+* velocity of a robot, creating a csv dataset under home/lvuser/dtchar
+*/
+
+//NOTE: If the folder home/lvuser/dtchar does not exist, it will crash
+
 public class VeloCharRobot extends TimedRobot {
     private static final TalonSRX leftMotorA = new TalonSRX(3), leftMotorB = new TalonSRX(4),
             rightMotorA = new TalonSRX(2), rightMotorB = new TalonSRX(1);
