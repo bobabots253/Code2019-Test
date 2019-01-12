@@ -8,7 +8,7 @@ import frc.robot.OI.OI;
 
 public class Elevate extends Command {
 
-    public static double holdVoltage = 0.15;
+    public static double holdVoltage = 0;
 
     public Elevate(){
         requires(Robot.elevator);
