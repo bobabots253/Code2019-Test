@@ -4,47 +4,56 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.OI.PIDController;
 
 public class VisionTrack extends Command {
 
     
-    private double last_heading_error = 0, kDAim = 0.005;
-    private double kPAim = -0.001, kPDistance = 0, min_aim_command = 0.13, left = 0, right = 0;
+    private double left = 0, right = 0;
     
+    private double aim_kP = 0.01;
+    private double aim_kI = 0;
+    private double aim_kD = 0;
+    private double aim_kF = 0;
+
+    private double dist_kP = 0;
+    private double dist_kI = 0;
+    private double dist_kD = 0;
+    private double dist_kF = 0;
+
+    private PIDController aim =  new PIDController(aim_kP, aim_kI, aim_kD, 0.02);
+    private PIDController distance = new PIDController(dist_kP, dist_kI, dist_kD, 0.02);
     
     public VisionTrack() {
         requires(Robot.drivetrain);
+
+        aim.configure(0);
+        distance.configure(0);
     }
 
     protected void execute() {
 
-        double tx = Robot.oi.getxOffset();
-        double ty = Robot.oi.getyOffset();
+        double heading_error = -Robot.oi.getxOffset();
+        double distance_error = Robot.oi.getyOffset();
 
-        boolean hasTarget = true;
+        SmartDashboard.putNumber("heading_error", heading_error);
 
-        double heading_error = -tx;
-        
-        double distance_error = ty;
-        double steering_adjust = 0;
+        double steering_adjust = aim.calculate(heading_error);
+        double distance_adjust = distance.calculate(distance_error);
 
+        left = distance_adjust + steering_adjust;
+        right = distance_adjust - steering_adjust;
 
-        if(tx > -0.5){
-            hasTarget = false;
-            steering_adjust = kPAim * heading_error + kDAim*(heading_error - last_heading_error) + min_aim_command;
-        } else if (tx < 0.5){
-            hasTarget = false;
-            steering_adjust = kPAim * heading_error + kDAim*(heading_error - last_heading_error) - min_aim_command;
-        } else {
-            hasTarget = true;
-        }
+        SmartDashboard.putNumber("left", left);
+        SmartDashboard.putNumber("right", right);
 
-        last_heading_error = heading_error;
+        left += heading_error > 0 ? aim_kF : -aim_kF;
+        right += heading_error > 0 ? aim_kF : -aim_kF;
 
-        SmartDashboard.putBoolean("hasTarget", hasTarget);
+        DrivetrainSubsystem.drive(left, right);
 
-        double distance_adjust = kPDistance * distance_error;
-        DrivetrainSubsystem.drive(Robot.oi.throttleValue() + distance_adjust + steering_adjust, Robot.oi.throttleValue() + distance_adjust - steering_adjust);
+        System.out.println("applied" + left + "," + right);
+
     }
 
     protected boolean isFinished(){

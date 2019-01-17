@@ -111,6 +111,7 @@ public class OI {
     * Methods for getting limelight values
     */
     public double getxOffset() {
+        System.out.println(limelight.getEntry("tx").getDouble(0));
         return limelight.getEntry("tx").getDouble(0);
     }
 
