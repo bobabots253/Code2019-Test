@@ -112,11 +112,11 @@ public class OI {
     */
     public double getxOffset() {
         System.out.println(limelight.getEntry("tx").getDouble(0));
-        return limelight.getEntry("tx").getDouble(0);
+        return -limelight.getEntry("tx").getDouble(0);
     }
 
     public double getyOffset(){
-        return limelight.getEntry("ty").getDouble(0);
+        return -limelight.getEntry("ty").getDouble(0);
     }
 
     public void changeLEDMode(int val){

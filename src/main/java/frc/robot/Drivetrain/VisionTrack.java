@@ -11,10 +11,10 @@ public class VisionTrack extends Command {
     
     private double left = 0, right = 0;
     
-    private double aim_kP = 0.01;
+    private double aim_kP = 0.02;
     private double aim_kI = 0;
     private double aim_kD = 0;
-    private double aim_kF = 0;
+    private double aim_kF = 0.09;
 
     private double dist_kP = 0;
     private double dist_kI = 0;
@@ -33,7 +33,7 @@ public class VisionTrack extends Command {
 
     protected void execute() {
 
-        double heading_error = -Robot.oi.getxOffset();
+        double heading_error = Robot.oi.getxOffset(); //when negative u want go right fast
         double distance_error = Robot.oi.getyOffset();
 
         SmartDashboard.putNumber("heading_error", heading_error);
@@ -41,16 +41,18 @@ public class VisionTrack extends Command {
         double steering_adjust = aim.calculate(heading_error);
         double distance_adjust = distance.calculate(distance_error);
 
-        left = distance_adjust + steering_adjust;
-        right = distance_adjust - steering_adjust;
+        left = 0-steering_adjust;
+        right = 0+steering_adjust;
 
+        
+        left += left > 0 ? aim_kF : -aim_kF;
+        right += right > 0 ? aim_kF : -aim_kF;
+        
+
+        DrivetrainSubsystem.drive(left, right);
         SmartDashboard.putNumber("left", left);
         SmartDashboard.putNumber("right", right);
 
-        left += heading_error > 0 ? aim_kF : -aim_kF;
-        right += heading_error > 0 ? aim_kF : -aim_kF;
-
-        DrivetrainSubsystem.drive(left, right);
 
         System.out.println("applied" + left + "," + right);
 

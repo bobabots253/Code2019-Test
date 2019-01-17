@@ -30,10 +30,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    intake = IntakeSubsystem.getInstance();
-    elevator = ElevatorSubsystem.getInstance();
-    drivetrain = DrivetrainSubsystem.getInstance();
-    oi = new OI();
+    // intake = IntakeSubsystem.getInstance();
+    // elevator = ElevatorSubsystem.getInstance();
+     drivetrain = DrivetrainSubsystem.getInstance();
+     oi = new OI();
     
     /*camera = CameraServer.getInstance().startAutomaticCapture(0);
 
@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
 
     //autonomousCommand = new AutonomousCommand(gameData, position, priority);
 
-    new PathFollower("Straight15ft").start();
+    //new PathFollower("Straight15ft").start();
   }
 
   @Override

@@ -69,7 +69,5 @@ public class IntakeSubsystem extends Subsystem {
     }*/
 
     @Override
-    protected void initDefaultCommand() {
-        new IntakeSpin();
-    }
+    protected void initDefaultCommand() {}
 }

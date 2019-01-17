@@ -97,8 +97,8 @@ public class DrivetrainSubsystem extends Subsystem {
     }
 
     public static void setOpenLoopRamp(double ramp) {
-        leftMotorA.configOpenloopRamp(ramp, 10);
-        rightMotorA.configOpenloopRamp(ramp, 10);
+        leftMotorA.configOpenloopRamp(ramp, 0);
+        rightMotorA.configOpenloopRamp(ramp, 0);
     }
 
     // Sets drivetrain sides to speed parameters

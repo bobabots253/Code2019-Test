@@ -8,7 +8,7 @@ import frc.robot.Robot;
 
 public class CurvatureDrive extends Command {
     private static double right, left;
-    private double driveRamp = 0.5, quickturnRamp = 0;
+    private double driveRamp = 0, quickturnRamp = 0;
 
     private static final double kJoystickDeadband = 0.05;
 
@@ -34,9 +34,9 @@ public class CurvatureDrive extends Command {
 
     @Override
     protected boolean isFinished() {
-        return false;
+        return true;
     }
-
+    
     protected void execute(){
         
         //Getting the raw joystick values from OI
@@ -60,6 +60,7 @@ public class CurvatureDrive extends Command {
 
             left = exponentiate(left, 2);
             right = exponentiate(right, 2);
+
         } else {
             DrivetrainSubsystem.setOpenLoopRamp(quickturnRamp);
 
@@ -67,22 +68,12 @@ public class CurvatureDrive extends Command {
             right = 0.5*(-qRight+qLeft);
         }
 
-        /*
-        //Checks the current position of the shifters in order to determine which values to deadband the motor output to
-        if(DrivetrainSubsystem.shifter.get() == Value.kForward){
-            left = deadbandY(left, kLinterceptHigh/12.0);
-            right = deadbandY(right, kRinterceptHigh/12.0);
-
-        } else if (DrivetrainSubsystem.shifter.get() == Value.kForward){
-            left = deadbandY(left, kLinterceptLow/12.0);
-            right = deadbandY(right, kRinterceptLow/12.0);
-        }
-        
-        //Drives the motors at calculated speeds
-        */
         DrivetrainSubsystem.drive(left, right);
         
-    }
+}
+
+
+
 
     /**
      * Essentially an implementation of the slope formula, m = (y1-y2)/(x1-x2) = (1 - 0)/(1 - deadband)
