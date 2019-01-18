@@ -8,15 +8,14 @@ import frc.robot.OI.PIDController;
 
 public class VisionTrack extends Command {
 
-    
     private double left = 0, right = 0;
     
-    private double aim_kP = 0.02;
+    private double aim_kP = 0.01;
     private double aim_kI = 0;
-    private double aim_kD = 0;
-    private double aim_kF = 0.09;
+    private double aim_kD = 0.001;
+    private double aim_kF = 0.05;
 
-    private double dist_kP = 0;
+    private double dist_kP = 0.01;
     private double dist_kI = 0;
     private double dist_kD = 0;
     private double dist_kF = 0;
@@ -41,20 +40,16 @@ public class VisionTrack extends Command {
         double steering_adjust = aim.calculate(heading_error);
         double distance_adjust = distance.calculate(distance_error);
 
-        left = 0-steering_adjust;
-        right = 0+steering_adjust;
+        left = distance_adjust-steering_adjust;
+        right = distance_adjust+steering_adjust;
 
-        
         left += left > 0 ? aim_kF : -aim_kF;
         right += right > 0 ? aim_kF : -aim_kF;
         
 
-        DrivetrainSubsystem.drive(left, right);
+        DrivetrainSubsystem.drive(Robot.oi.throttleValue() + left, Robot.oi.throttleValue() +  right);
         SmartDashboard.putNumber("left", left);
         SmartDashboard.putNumber("right", right);
-
-
-        System.out.println("applied" + left + "," + right);
 
     }
 
@@ -65,7 +60,5 @@ public class VisionTrack extends Command {
     protected void end(){
         DrivetrainSubsystem.drive(0, 0);
     }
-
-
 
 }

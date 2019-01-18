@@ -70,7 +70,7 @@ public class Drive extends Command {
         if(quickturn){
             DrivetrainSubsystem.setOpenLoopRamp(0);
         }
-        
+        /*
 
         //Checks the current position of the shifters in order to determine which values to deadband the motor output to
         switch(DrivetrainSubsystem.shifter.get()){
@@ -89,6 +89,8 @@ public class Drive extends Command {
         }
         
         //Drives the motors at calculated speeds
+
+        */
         DrivetrainSubsystem.drive(left, right);
     }
 

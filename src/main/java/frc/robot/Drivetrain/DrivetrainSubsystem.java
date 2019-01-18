@@ -31,8 +31,11 @@ public class DrivetrainSubsystem extends Subsystem {
     private static final int kCruiseVelo = 500;
     private static final int kAccel = 1000;
 
+    /*
     public static Compressor compressor = new Compressor(1);
     public static final DoubleSolenoid shifter = new DoubleSolenoid(1, 6, 7);
+    */
+
     public static final AHRS gyro = new AHRS(SPI.Port.kMXP);
     public static final TalonSRX leftMotorA = new TalonSRX(3), leftMotorB = new TalonSRX(4),
             rightMotorA = new TalonSRX(2), rightMotorB = new TalonSRX(1);
@@ -116,6 +119,7 @@ public class DrivetrainSubsystem extends Subsystem {
         rightMotorA.set(ControlMode.MotionMagic, targetRight);
 
     }
+    /* Compressor + Solenoid Code
 
     public static void shiftGear() {
         switch (shifter.get()) {
@@ -135,6 +139,8 @@ public class DrivetrainSubsystem extends Subsystem {
         System.out.println("Shifting gears!");
     }
 
+    */
+
     public static void resetEncoders() {
         leftMotorA.setSelectedSensorPosition(0, 0, 10);
         rightMotorA.setSelectedSensorPosition(0, 0, 10);
@@ -151,9 +157,10 @@ public class DrivetrainSubsystem extends Subsystem {
     public static void setCoastMode() {
         Arrays.stream(motors).forEach(motor -> motor.setNeutralMode(NeutralMode.Coast));
     }
-
+    /*
     public static void stopCompressor() {
         compressor.stop();
     }
+    */
 
 }

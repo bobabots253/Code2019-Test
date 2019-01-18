@@ -13,6 +13,7 @@ import static frc.robot.OI.XBPovButton.UP_RIGHT;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -21,6 +22,8 @@ import frc.robot.Drivetrain.VisionTrack;
 
 @SuppressWarnings("unused")
 public class OI {
+
+    private DigitalInput photoelectricA = new DigitalInput(9);
     
     private XboxController xboxcontroller;
 
@@ -111,7 +114,6 @@ public class OI {
     * Methods for getting limelight values
     */
     public double getxOffset() {
-        System.out.println(limelight.getEntry("tx").getDouble(0));
         return -limelight.getEntry("tx").getDouble(0);
     }
 
@@ -173,4 +175,12 @@ public class OI {
     public boolean isQuickturnTwo(){
         return xboxcontroller.getBumper(Hand.kLeft);
     }
+
+    /*
+     * Methods for photoelectric
+     */
+
+     public boolean getPhotoelectricA(){
+        return photoelectricA.get();
+     }
 }

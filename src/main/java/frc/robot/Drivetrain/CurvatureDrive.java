@@ -2,6 +2,7 @@ package frc.robot.Drivetrain;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 //import static frc.robot.Drivetrain.DrivetrainSubsystem.motors;
@@ -38,13 +39,15 @@ public class CurvatureDrive extends Command {
     }
     
     protected void execute(){
+
+        SmartDashboard.putBoolean("Photoelectric", Robot.oi.getPhotoelectricA());
         
         //Getting the raw joystick values from OI
         double throttle = Robot.oi.throttleValue();
         double turn = Robot.oi.turnValue();
         
         //Deadbanding the joystick values to avoid movement due to controller drift
-        throttle = deadbandX(throttle, kJoystickDeadband);
+        throttle = deadbandX(throttle , kJoystickDeadband);
         turn = deadbandX(turn, kJoystickDeadband);
         
         //Handles quickturning
@@ -71,8 +74,6 @@ public class CurvatureDrive extends Command {
         DrivetrainSubsystem.drive(left, right);
         
 }
-
-
 
 
     /**
