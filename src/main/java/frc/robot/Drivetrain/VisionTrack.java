@@ -15,7 +15,7 @@ public class VisionTrack extends Command {
     private double aim_kD = 0.001;
     private double aim_kF = 0.05;
 
-    private double dist_kP = 0.01;
+    private double dist_kP = 0.2;
     private double dist_kI = 0;
     private double dist_kD = 0;
     private double dist_kF = 0;
