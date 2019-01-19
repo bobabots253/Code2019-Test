@@ -26,8 +26,8 @@ public class CurvatureDrive extends Command {
      * Right: 9.67 ft/s, 2.94 m/s, equation: 251x-231, intercept at 0.920v
      * Average: 9.94ft/s, 3.025 m/s
      */
-    public static final double kLinterceptLow = 0.968;
-    public static final double kRinterceptLow = 1.058;
+    public static final double kLinterceptLow = 0; //0.968
+    public static final double kRinterceptLow = 0; //1.058
 
     public CurvatureDrive(){
         requires(DrivetrainSubsystem.getInstance());
@@ -58,8 +58,8 @@ public class CurvatureDrive extends Command {
         if(!quickturn){
             DrivetrainSubsystem.setOpenLoopRamp(driveRamp);
 
-            left = throttle+throttle*turn;
-            right = throttle-throttle*turn;
+            left = throttle+throttle*turn + 0.5*(-qLeft+qRight);
+            right = throttle-throttle*turn + 0.5*(-qRight+qLeft);
 
             left = exponentiate(left, 2);
             right = exponentiate(right, 2);

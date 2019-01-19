@@ -125,6 +125,10 @@ public class OI {
         limelight.getEntry("ledMode").setNumber(val);
     }
 
+    public boolean getTargetValid(){
+        return limelight.getEntry("tv").getDouble(0) == 1;
+    }
+
     /*
     * Methods for getting joystick values
     */

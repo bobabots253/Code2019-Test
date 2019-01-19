@@ -73,6 +73,8 @@ public class DrivetrainSubsystem extends Subsystem {
             motor.configContinuousCurrentLimit(35, kTimeout);
             motor.configVoltageCompSaturation(12, kTimeout);
             motor.enableVoltageCompensation(true);
+
+            motor.configNeutralDeadband(0.08, kTimeout);
             motor.enableCurrentLimit(true);
 
             // PID Gains and settings
