@@ -49,6 +49,7 @@ public class OI {
     private JoystickButton dpadNONE;
 
     private NetworkTable limelight;
+    private double last_valid_x_offset = 0;
     
     public OI(){
         xboxcontroller = new XboxController(1);
@@ -117,6 +118,14 @@ public class OI {
         return -limelight.getEntry("tx").getDouble(0);
     }
 
+    public double getLastValidXOffset(){
+        return last_valid_x_offset;
+    }
+
+    public void setLastValidXOffset(double val){
+        last_valid_x_offset = val;
+    }
+
     public double getyOffset(){
         return -limelight.getEntry("ty").getDouble(0);
     }
@@ -128,6 +137,7 @@ public class OI {
     public boolean getTargetValid(){
         return limelight.getEntry("tv").getDouble(0) == 1;
     }
+
 
     /*
     * Methods for getting joystick values

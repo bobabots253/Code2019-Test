@@ -32,13 +32,14 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // intake = IntakeSubsystem.getInstance();
     // elevator = ElevatorSubsystem.getInstance();
-     drivetrain = DrivetrainSubsystem.getInstance();
-     oi = new OI();
-    
-    /*camera = CameraServer.getInstance().startAutomaticCapture(0);
+    drivetrain = DrivetrainSubsystem.getInstance();
+    oi = new OI();
 
-    camera.setResolution(320, 240);
-    camera.setFPS(15);*/
+    /*
+     * camera = CameraServer.getInstance().startAutomaticCapture(0);
+     * 
+     * camera.setResolution(320, 240); camera.setFPS(15);
+     */
 
     positionChooser = new SendableChooser<Position>();
     positionChooser.addOption("Center", Position.CENTER);
@@ -61,6 +62,7 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().removeAll();
 
     DrivetrainSubsystem.leftMotorB.setSelectedSensorPosition(0, 0, 10);
+    oi.setLastValidXOffset(0);
   }
 
   @Override
@@ -72,6 +74,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Right Encoder", DrivetrainSubsystem.rightMotorA.getSelectedSensorPosition(0));
     SmartDashboard.putNumber("Left Encoder", DrivetrainSubsystem.leftMotorA.getSelectedSensorPosition(0));
 
+    double offset = oi.getxOffset();
+    if (Math.abs(offset) > 0.1) {
+      oi.setLastValidXOffset(offset);
+    }
+
   }
 
   @Override
@@ -82,31 +89,31 @@ public class Robot extends TimedRobot {
     Position position = positionChooser.getSelected();
     Priority priority = priorityChooser.getSelected();
 
-    //DrivetrainSubsystem.shiftGear(Value.kReverse);
+    // DrivetrainSubsystem.shiftGear(Value.kReverse);
 
-    //autonomousCommand = new AutonomousCommand(gameData, position, priority);
+    // autonomousCommand = new AutonomousCommand(gameData, position, priority);
 
-    //new PathFollower("Straight15ft").start();
+    // new PathFollower("Straight15ft").start();
   }
 
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-  
+
   }
- 
+
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
-
   }
 
-  public void teleopInit(){
+  public void teleopInit() {
     DrivetrainSubsystem.setBrakeMode();
     DrivetrainSubsystem.leftMotorB.setSelectedSensorPosition(0, 0, 10);
+    oi.setLastValidXOffset(0);
 
-    //DrivetrainSubsystem.shiftGear(Value.kReverse);
+    // DrivetrainSubsystem.shiftGear(Value.kReverse);
 
   }
 
@@ -115,34 +122,34 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
   }
 
-  public void disabledPeriodic(){
+  public void disabledPeriodic() {
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     SmartDashboard.putString("gameData", gameData);
   }
 
-  public enum Position{
+  public enum Position {
     LEFT('L'), CENTER('C'), RIGHT('R');
-    
+
     private final char pos;
-    
-    private Position(char pos){
+
+    private Position(char pos) {
       this.pos = pos;
     }
-    
-    public char getPos(){
+
+    public char getPos() {
       return pos;
     }
   }
-  
-  public enum Goal{
+
+  public enum Goal {
     SCALE, SWITCH, EXCHANGE, BASELINE;
   }
-  
-  public enum AutoMode{
+
+  public enum AutoMode {
     SAFE, TEST, EXP;
   }
-  
-  public enum Priority{
+
+  public enum Priority {
     DEFAULT, BASELINE;
   }
 
