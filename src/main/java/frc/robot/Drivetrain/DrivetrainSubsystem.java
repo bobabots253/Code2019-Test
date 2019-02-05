@@ -31,51 +31,55 @@ public class DrivetrainSubsystem extends Subsystem {
     private static final int kCruiseVelo = 500;
     private static final int kAccel = 1000;
 
-    /*
+    
     public static Compressor compressor = new Compressor(1);
-    public static final DoubleSolenoid shifter = new DoubleSolenoid(1, 6, 7);
-    */
+    public static final DoubleSolenoid shifter = new DoubleSolenoid(1, 0, 1);
+    
 
     public static final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    public static final TalonSRX leftMotorA = new TalonSRX(3), leftMotorB = new TalonSRX(4),
-            rightMotorA = new TalonSRX(2), rightMotorB = new TalonSRX(1);
+    public static final TalonSRX leftMotorA = new TalonSRX(1), leftMotorB = new TalonSRX(2), leftMotorC = new TalonSRX(3),
+            rightMotorA = new TalonSRX(4), rightMotorB = new TalonSRX(6), rightMotorC = new TalonSRX(7);
 
     // Creates arrays for various motors so I can call the same methods for each at
     // the same time
-    public static final TalonSRX[] motors = { leftMotorA, leftMotorB, rightMotorB, rightMotorA };
-    private static final TalonSRX[] leftMotors = { leftMotorA, leftMotorB };
-    private static final TalonSRX[] rightMotors = { rightMotorA, rightMotorB };
+    public static final TalonSRX[] motors = { leftMotorA, leftMotorB, leftMotorC, rightMotorA, rightMotorB, rightMotorC};
+    private static final TalonSRX[] leftMotors = { leftMotorA, leftMotorB, leftMotorC };
+    private static final TalonSRX[] rightMotors = { rightMotorA, rightMotorB, rightMotorC };
 
     private static int ledval = 0;
 
     public void initDefaultCommand() {
-        setDefaultCommand(new CurvatureDrive());
+        setDefaultCommand(new Drive());
     }
 
     private DrivetrainSubsystem() {
         // Setting leader and follower talons
         leftMotorB.follow(leftMotorA);
+        leftMotorC.follow(leftMotorA);
         rightMotorB.follow(rightMotorA);
+        rightMotorC.follow(rightMotorA);
 
         leftMotorB.configOpenloopRamp(0, kTimeout);
         rightMotorB.configOpenloopRamp(0, kTimeout);
+        leftMotorC.configOpenloopRamp(0, kTimeout);
+        rightMotorC.configOpenloopRamp(0, kTimeout);
 
         // DrivetrainSubsystem negation settings
-        Arrays.stream(leftMotors).forEach(motor -> motor.setInverted(false));
-        Arrays.stream(rightMotors).forEach(motor -> motor.setInverted(true));
+        Arrays.stream(leftMotors).forEach(motor -> motor.setInverted(true));
+        Arrays.stream(rightMotors).forEach(motor -> motor.setInverted(false));
 
         // Setting common settings for Talons
         for (TalonSRX motor : motors) {
 
             // Current and voltage settings
-            motor.configPeakCurrentLimit(30, kTimeout);
+            motor.configPeakCurrentLimit(20, kTimeout);
             motor.configPeakCurrentDuration(500, kTimeout);
-            motor.configContinuousCurrentLimit(35, kTimeout);
+            motor.configContinuousCurrentLimit(15, kTimeout);
             motor.configVoltageCompSaturation(12, kTimeout);
             motor.enableVoltageCompensation(true);
 
-            motor.configNeutralDeadband(0.08, kTimeout);
-            motor.enableCurrentLimit(true);
+            motor.configNeutralDeadband(0, kTimeout);
+            motor.enableCurrentLimit(false);
 
             // PID Gains and settings
             motor.selectProfileSlot(0, kPIDIndex);
@@ -121,8 +125,8 @@ public class DrivetrainSubsystem extends Subsystem {
         rightMotorA.set(ControlMode.MotionMagic, targetRight);
 
     }
-    /* Compressor + Solenoid Code
 
+/*
     public static void shiftGear() {
         switch (shifter.get()) {
         case kForward:
@@ -140,8 +144,8 @@ public class DrivetrainSubsystem extends Subsystem {
         shifter.set(shiftTo);
         System.out.println("Shifting gears!");
     }
-
-    */
+*/
+    
 
     public static void resetEncoders() {
         leftMotorA.setSelectedSensorPosition(0, 0, 10);

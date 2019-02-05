@@ -48,6 +48,7 @@ public class CurvatureDriveTriggered extends Command {
         throttle = deadbandX(throttle, kJoystickDeadband);
         turn = deadbandX(turn, kJoystickDeadband);
         
+        
         //Handles quickturning
         boolean quickturn = Robot.oi.isQuickturnTwo();
         

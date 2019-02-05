@@ -16,9 +16,14 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Drivetrain.Drive;
+import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.Drivetrain.VisionTrack;
+import frc.robot.Intake.IntakeClamp;
+import frc.robot.Intake.IntakeSubsystem;
 
 @SuppressWarnings("unused")
 public class OI {
@@ -78,8 +83,9 @@ public class OI {
         limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
         ButtonB.whileHeld(new VisionTrack());
-
-/*
+     //   ButtonA.whenPressed(new RunCommand( () -> DrivetrainSubsystem.shiftGear() ));
+        dpadRIGHT.whenPressed(new RunCommand( () -> IntakeSubsystem.switchIntakeClamp() ));
+/*      
         //Driver overrides in case joystick buttons fail
         ButtonRB.whileHeld(new IntakeSpin(-0.7));
         ButtonRB.whenReleased(new IntakeSpin(0));
@@ -94,7 +100,7 @@ public class OI {
         Button2 = new JoystickButton(intakestick, 2);
         Button3 = new JoystickButton(intakestick, 3);
 
-        //Drivatrain and intake toggles
+      
         dpadLEFT.whenPressed(new RunCommand( () -> DrivetrainSubsystem.shiftGear() ));
         Button3.whenPressed(new RunCommand( () -> IntakeSubsystem.switchIntakeClamp() ));
         dpadRIGHT.whenPressed(new RunCommand( () -> IntakeSubsystem.switchIntakeClamp() ));
@@ -115,6 +121,7 @@ public class OI {
     * Methods for getting limelight values
     */
     public double getxOffset() {
+        SmartDashboard.putNumber("xoffset",-limelight.getEntry("tx").getDouble(0.0));
         return -limelight.getEntry("tx").getDouble(0);
     }
 
@@ -127,7 +134,7 @@ public class OI {
     }
 
     public double getyOffset(){
-        return -limelight.getEntry("ty").getDouble(0);
+        return -limelight.getEntry("ty").getDouble(0.0);
     }
 
     public void changeLEDMode(int val){

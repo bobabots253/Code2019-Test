@@ -22,12 +22,14 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 //NOTE: If the folder home/lvuser/dtchar does not exist, it will crash
 
 public class VeloCharRobot extends TimedRobot {
-    private static final TalonSRX leftMotorA = new TalonSRX(3), leftMotorB = new TalonSRX(4),
-            rightMotorA = new TalonSRX(2), rightMotorB = new TalonSRX(1);
+    public static final TalonSRX leftMotorA = new TalonSRX(1), leftMotorB = new TalonSRX(2), leftMotorC = new TalonSRX(3),
+            rightMotorA = new TalonSRX(4), rightMotorB = new TalonSRX(6), rightMotorC = new TalonSRX(7);
 
-    private static final TalonSRX[] motors = { leftMotorA, leftMotorB, rightMotorB, rightMotorA };
-    private static final TalonSRX[] leftMotors = { leftMotorA, leftMotorB };
-    private static final TalonSRX[] rightMotors = { rightMotorA, rightMotorB };
+    // Creates arrays for various motors so I can call the same methods for each at
+    // the same time
+    public static final TalonSRX[] motors = { leftMotorA, leftMotorB, leftMotorC, rightMotorA, rightMotorB, rightMotorC};
+    private static final TalonSRX[] leftMotors = { leftMotorA, leftMotorB, leftMotorC };
+    private static final TalonSRX[] rightMotors = { rightMotorA, rightMotorB, rightMotorC };
 
     private PrintWriter csvWriter = null;
     private Joystick joystick = new Joystick(0);

@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 //import static frc.robot.Drivetrain.DrivetrainSubsystem.motors;
@@ -12,23 +13,8 @@ public class Drive extends Command {
     private static double right, left;
     boolean autoEnabled = false;
 
-    private static final double kJoystickDeadband = 0.15;
-
-    /**
-     * Left: 21.51 ft/s, 6.559 m/s, equation: 582x-796, intercept at 1.3677v
-     * Right 20.51 ft/s, 6.253 m/s, equation: 553x-736, intercept at 1.3309v
-     * Average: 21.02 ft/s, 6.406 m/s
-     */
-    public static final double kLinterceptHigh = 0.0;//1.3677; 
-    public static final double kRinterceptHigh = 0.0;//1.3309;
-
-    /**
-     * Left: 10.22 ft/s, 3.11 m/s, equation: 265x-242, intercept at 0.913v
-     * Right: 9.67 ft/s, 2.94 m/s, equation: 251x-231, intercept at 0.920v
-     * Average: 9.94ft/s, 3.025 m/s
-     */
-    public static final double kLinterceptLow = 0.968;
-    public static final double kRinterceptLow = 1.058;
+    private static final double kJoystickDeadband = 0.03;
+    private static final double minVoltMove = 0.8/12.0;
 
     public Drive(){
         requires(DrivetrainSubsystem.getInstance());
@@ -50,47 +36,28 @@ public class Drive extends Command {
         //Deadbanding the joystick values to avoid moving when there is no input
         throttle = deadbandX(throttle, kJoystickDeadband);
         turn = deadbandX(turn, kJoystickDeadband);
-        //System.out.println(turn);
+        SmartDashboard.putNumber("stick", DrivetrainSubsystem.rightMotorA.getMotorOutputVoltage());
+        SmartDashboard.putNumber("lstick", DrivetrainSubsystem.leftMotorA.getMotorOutputVoltage());
 
         boolean quickturn = throttle == 0;
         
         if(quickturn){ //Quickturning when no input from throttle stick
-            left = 0.75*turn;
-            right = -0.75*turn;
+            left = 0.5*turn;
+            right = -0.5*turn;
         } else { //Binary curvature drive when throttle stick has input, squares outputs to add sensitivity curve
-            left = throttle+throttle*turn;
-            right = throttle-throttle*turn;
+            left = throttle+throttle*turn*0.85;
+            right = throttle-throttle*turn*0.85;
 
-            left = exponentiate(left, 2);
-            right = exponentiate(right, 2);
+            //left = exponentiate(left, 2);
+            //right = exponentiate(right, 2);
         }
 
-        //System.out.println("driving");
-        DrivetrainSubsystem.setOpenLoopRamp(0.5);
-        if(quickturn){
-            DrivetrainSubsystem.setOpenLoopRamp(0);
-        }
-        /*
+        SmartDashboard.putNumber("RACurr", DrivetrainSubsystem.rightMotorA.getOutputCurrent());
+        SmartDashboard.putNumber("LACurr", DrivetrainSubsystem.leftMotorA.getOutputCurrent());
 
-        //Checks the current position of the shifters in order to determine which values to deadband the motor output to
-        switch(DrivetrainSubsystem.shifter.get()){
-            case kForward: 
-                left = deadbandY(left, kLinterceptHigh/12.0);
-                right = deadbandY(right, kRinterceptHigh/12.0);
+        left = deadbandY(left, minVoltMove);
+        right = deadbandY(right, minVoltMove);
 
-                break;
-            case kReverse:
-                left = deadbandY(left, kLinterceptLow/12.0);
-                right = deadbandY(right, kRinterceptLow/12.0);
-
-                break;
-            case kOff:
-                break;
-        }
-        
-        //Drives the motors at calculated speeds
-
-        */
         DrivetrainSubsystem.drive(left, right);
     }
 

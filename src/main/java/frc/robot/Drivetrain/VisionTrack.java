@@ -9,12 +9,12 @@ import frc.robot.OI.PIDController;
 public class VisionTrack extends Command {
 
     private double left, right;
-
+    
     private double aim_kP = 0.01;
     private double aim_kI = 0;
-    private double aim_kD = 0.001;
+    private double aim_kD = 0;
 
-    private double dist_kP = 0.15;
+    private double dist_kP = 0;
     private double dist_kI = 0;
     private double dist_kD = 0;
 
@@ -24,6 +24,7 @@ public class VisionTrack extends Command {
     private PIDController aim = new PIDController(aim_kP, aim_kI, aim_kD, 0.02);
     private PIDController distance = new PIDController(dist_kP, dist_kI, dist_kD, 0.02);
 
+    
     public VisionTrack() {
         requires(Robot.drivetrain);
 
@@ -43,7 +44,7 @@ public class VisionTrack extends Command {
 
             heading_error = Robot.oi.getLastValidXOffset();
             distance_error = 0;
-
+            
         } else {
 
             SmartDashboard.putBoolean("Has Target", true);
@@ -53,6 +54,8 @@ public class VisionTrack extends Command {
 
 
         }
+
+        SmartDashboard.putNumber("distance_err", distance_error);
 
         SmartDashboard.putNumber("heading_error", heading_error);
 
